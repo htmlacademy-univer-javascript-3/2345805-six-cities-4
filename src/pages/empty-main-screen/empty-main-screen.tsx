@@ -1,4 +1,3 @@
-import React from 'react';
 
 function EmptyMainScreen(): JSX.Element {
   return (

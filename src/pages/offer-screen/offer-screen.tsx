@@ -1,5 +1,3 @@
-import React from 'react';
-
 function OfferScreen(): JSX.Element {
   return (
     <div className="page">
