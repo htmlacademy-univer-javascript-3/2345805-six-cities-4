@@ -1,20 +1,24 @@
 import { Link } from 'react-router-dom';
+import CitiesMap from '../../components/cities-map/cities-map';
 import CityCardList from '../../components/city-card-list/city-card-list';
 import { Offer } from '../../types/offer';
 
 type MainScreenProps = {
   placesCount: number;
   offers: Offer[];
-}
+};
 
-function MainScreen({placesCount, offers}: MainScreenProps): JSX.Element {
+function MainScreen({ placesCount, offers }: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link to='/' className="header__logo-link header__logo-link--active">
+              <Link
+                to="/"
+                className="header__logo-link header__logo-link--active"
+              >
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -123,7 +127,9 @@ function MainScreen({placesCount, offers}: MainScreenProps): JSX.Element {
               <CityCardList cities={offers} />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className='cities__map map'>
+                <CitiesMap city={offers[0].city} points={offers} />
+              </section>
             </div>
           </div>
         </div>
