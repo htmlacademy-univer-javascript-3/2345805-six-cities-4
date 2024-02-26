@@ -124,7 +124,7 @@ function MainScreen({ placesCount, offers }: MainScreenProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <CityCardList cities={offers} />
+              <CityCardList cities={offers} viewType='regular' />
             </section>
             <div className="cities__right-section">
               <section className='cities__map map'>

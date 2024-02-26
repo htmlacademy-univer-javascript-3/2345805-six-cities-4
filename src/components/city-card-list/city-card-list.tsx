@@ -4,14 +4,21 @@ import { Offer } from '../../types/offer';
 
 type CityCardListProps = {
   cities: Offer[];
+  viewType: 'regular' | 'near';
 };
 
-function CityCardList({ cities }: CityCardListProps) {
+function CityCardList({ cities, viewType }: CityCardListProps) {
   // const [activeCard, setActiveCard] = useState({id: 1});
   return (
-    <div className="cities__places-list places__list tabs__content">
+    <div
+      className={`${
+        viewType === 'regular'
+          ? 'cities__places-list tabs__content'
+          : 'near-places__list'
+      } places__list `}
+    >
       {cities.map((city) => (
-        <CityCard key={city.id} cardInfo={city} />
+        <CityCard key={city.id} cardInfo={city} viewType={viewType} />
       ))}
     </div>
   );
