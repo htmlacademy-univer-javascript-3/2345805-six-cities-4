@@ -5,16 +5,16 @@ import FavoutitesScreen from '../../pages/favourites-screen/favourites-screen';
 import OfferScreen from '../../pages/offer-screen/offer-screen';
 import ErrorScreen from '../../pages/error-screen/error-screen';
 import PrivateRoute from '../private-route/private-route';
-// import { Review } from '../../types/review';
+import { Review } from '../../types/review';
 import { Offer } from '../../types/offer';
 
 type AppComponentProps = {
   placesCount: number;
-  // reviews: Review[];
+  reviews: Review[];
   offers: Offer[];
 };
 
-function App({ placesCount, offers }: AppComponentProps): JSX.Element {
+function App({ placesCount, offers, reviews }: AppComponentProps): JSX.Element {
   const favourites = offers.filter((o) => o.isFavorite);
   return (
     <BrowserRouter>
@@ -30,7 +30,7 @@ function App({ placesCount, offers }: AppComponentProps): JSX.Element {
           }
         />
         <Route path="/login" element={<LoginScreen />} />
-        <Route path="/offer/:id" element={<OfferScreen />} />
+        <Route path="/offer/:id" element={<OfferScreen reviews={reviews} offers={offers}/>} />
       </Routes>
     </BrowserRouter>
   );
