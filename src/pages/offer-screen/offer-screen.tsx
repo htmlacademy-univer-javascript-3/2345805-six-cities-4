@@ -194,7 +194,7 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <CitiesMap city={offers[0].city} points={offers.filter((e, ind) => ind !== 1)} />
+            <CitiesMap city={offers[0].city} points={offers.filter((e) => e.id !== '1')} />
           </section>
         </section>
         <div className="container">
@@ -202,7 +202,7 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>
-            <NearestCitiesCardList cities={offers.filter((e, ind) => ind !== 1)} />
+            <NearestCitiesCardList cities={offers.filter((e) => e.id !== '1')} />
 
           </section>
         </div>
