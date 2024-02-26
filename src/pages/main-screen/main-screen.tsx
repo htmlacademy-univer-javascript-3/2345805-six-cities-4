@@ -1,17 +1,20 @@
-import CityCard from '../../components/city-card/city-card';
+import { Link } from 'react-router-dom';
+import CityCardList from '../../components/city-card-list/city-card-list';
+import { Offer } from '../../types/offer';
 
 type MainScreenProps = {
   placesCount: number;
+  offers: Offer[];
 }
 
-function MainScreen({placesCount}: MainScreenProps): JSX.Element {
+function MainScreen({placesCount, offers}: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link header__logo-link--active">
+              <Link to='/' className="header__logo-link header__logo-link--active">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -19,7 +22,7 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
@@ -32,7 +35,9 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
                     <span className="header__user-name user__name">
                       Oliver.conner@gmail.com
                     </span>
-                    <span className="header__favorite-count">3</span>
+                    <Link to="/favourites">
+                      <span className="header__favorite-count">3</span>
+                    </Link>
                   </a>
                 </li>
                 <li className="header__nav-item">
@@ -115,13 +120,7 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <CityCard />
-                <CityCard />
-                <CityCard />
-                <CityCard />
-                <CityCard />
-              </div>
+              <CityCardList cities={offers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map"></section>
