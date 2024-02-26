@@ -5,10 +5,10 @@ import { getRating } from '../../utils';
 
 type CityCardProps = {
   cardInfo: Offer;
-  viewType: 'regular' | 'near';
+  typeClassName: string;
 };
 
-function CityCard({ cardInfo, viewType }: CityCardProps): JSX.Element {
+function CityCard({ cardInfo, typeClassName }: CityCardProps): JSX.Element {
   const {
     id,
     title,
@@ -22,7 +22,7 @@ function CityCard({ cardInfo, viewType }: CityCardProps): JSX.Element {
     previewImage,
   } = cardInfo;
   return (
-    <article className={`${viewType === 'regular' ? 'cities__card' : 'near-places__card'} place-card`}>
+    <article className={`${typeClassName} place-card`}>
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

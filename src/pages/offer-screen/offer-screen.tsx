@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import CommentForm from '../../components/comment-form/comment-form';
 import ReviewsList from '../../components/reviews-list/reviews-list';
-import CityCardList from '../../components/city-card-list/city-card-list';
 import { Review } from '../../types/review';
 import CitiesMap from '../../components/cities-map/cities-map';
 import { Offer } from '../../types/offer';
+import NearestCitiesCardList from '../../components/nearest-cities-card-list/nearest-cities-card-list';
 
 type OfferScreenProps = {
   reviews: Review[];
@@ -194,7 +194,7 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
             </div>
           </div>
           <section className="offer__map map">
-            <CitiesMap city={offers[0].city} points={offers} />
+            <CitiesMap city={offers[0].city} points={offers.filter((e, ind) => ind !== 1)} />
           </section>
         </section>
         <div className="container">
@@ -202,7 +202,7 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>
-            <CityCardList cities={offers} viewType='near' />
+            <NearestCitiesCardList cities={offers.filter((e, ind) => ind !== 1)} />
 
           </section>
         </div>

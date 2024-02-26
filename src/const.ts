@@ -8,3 +8,8 @@ export const Settings = {
   placesCount: 250,
 } as const;
 
+export enum CardType {
+  favourites = 'favorites__card',
+  nearest = 'near-places__card',
+  regular = 'cities__card',
+}
