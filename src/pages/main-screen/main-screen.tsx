@@ -7,11 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { Offer } from '../../types/offer';
 
-type MainScreenProps = {
-  placesCount: number;
-};
-
-function MainScreen({ placesCount }: MainScreenProps): JSX.Element {
+function MainScreen(): JSX.Element {
   const offers = useAppSelector((state) => state.offersList);
 
   const [currentCityOffers, setCurrentCityOffers] = useState<Offer[]>(offers);

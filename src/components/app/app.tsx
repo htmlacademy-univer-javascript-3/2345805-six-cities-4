@@ -11,17 +11,15 @@ import { setOffersList } from '../../store/action';
 import { Offer } from '../../types/offer';
 
 type AppComponentProps = {
-  placesCount: number;
   reviews: Review[];
 };
 
-function App({ placesCount, reviews }: AppComponentProps): JSX.Element | null {
+function App({ reviews }: AppComponentProps): JSX.Element | null {
   const offers: Offer[] = useAppSelector((state) => state.offersList);
   const dispatch = useAppDispatch();
   dispatch(setOffersList());
 
   const favourites = offers.filter((o) => o.isFavorite);
-  console.log(offers);
   if (offers.length === 0) {
     return null;
   }
@@ -29,7 +27,7 @@ function App({ placesCount, reviews }: AppComponentProps): JSX.Element | null {
     <BrowserRouter>
       <Routes>
         <Route path="*" element={<ErrorScreen />} />
-        <Route path="/" element={<MainScreen placesCount={placesCount} />} />
+        <Route path="/" element={<MainScreen />} />
         <Route
           path="/favourites"
           element={
