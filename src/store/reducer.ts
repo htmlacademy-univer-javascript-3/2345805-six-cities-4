@@ -16,7 +16,7 @@ const initialState: StateType = {
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, { payload }) => {
-      state.city = payload.city;
+      state.city = payload;
     })
     .addCase(setOffersList, (state) => {
       state.offersList = offers;

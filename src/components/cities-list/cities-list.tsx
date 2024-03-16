@@ -20,7 +20,7 @@ const City = ({ name, changeCityName }: CityProps): JSX.Element => (
 function CitiesList({ cities }: CitiesListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const handleCityChange = (city: string) => {
-    dispatch(changeCity({ city }));
+    dispatch(changeCity(city));
   };
   return (
     <ul className="locations__list tabs__list">
