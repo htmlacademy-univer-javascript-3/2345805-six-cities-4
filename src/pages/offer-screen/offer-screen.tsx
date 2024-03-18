@@ -9,16 +9,16 @@ import NearestCitiesCardList from '../../components/nearest-cities-card-list/nea
 type OfferScreenProps = {
   reviews: Review[];
   offers: Offer[];
-}
+};
 
-function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
+function OfferScreen({ reviews, offers }: OfferScreenProps): JSX.Element {
   return (
     <div className="page">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link to='/' className="header__logo-link">
+              <Link to="/" className="header__logo-link">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -186,15 +186,19 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">
-                  Reviews &middot; <span className="reviews__amount">{reviews.length}</span>
+                  Reviews &middot;{' '}
+                  <span className="reviews__amount">{reviews.length}</span>
                 </h2>
-                <ReviewsList reviews={reviews}/>
+                <ReviewsList reviews={reviews} />
                 <CommentForm />
               </section>
             </div>
           </div>
           <section className="offer__map map">
-            <CitiesMap city={offers[0].city} points={offers.filter((e) => e.id !== '1')} />
+            <CitiesMap
+              city={offers[0].city}
+              points={offers.filter((e) => e.id !== '1')}
+            />
           </section>
         </section>
         <div className="container">
@@ -202,8 +206,9 @@ function OfferScreen({reviews, offers}: OfferScreenProps): JSX.Element {
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>
-            <NearestCitiesCardList cities={offers.filter((e) => e.id !== '1')} />
-
+            <NearestCitiesCardList
+              offers={offers.filter((e) => e.id !== '1')}
+            />
           </section>
         </div>
       </main>
