@@ -30,7 +30,6 @@ const reducer = createReducer(initialState, (builder) => {
       state.city = payload;
     })
     .addCase(setSortType, (state, { payload }) => {
-      console.log(payload);
       state.selectedSortType = payload;
     })
     .addCase(setOffersList, (state) => {
