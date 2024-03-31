@@ -3,11 +3,10 @@ import { Icon, Marker, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import 'leaflet/dist/leaflet.css';
-import { Offer, City } from '../../types/offer';
+import { Offer } from '../../types/offer';
 import { useAppSelector } from '../../hooks';
 
 type MapProps = {
-  city: City;
   points: Offer[];
 };
 
@@ -23,9 +22,9 @@ const currentCustomIcon = new Icon({
   iconAnchor: [20, 40],
 });
 
-function CitiesMap({ city, points }: MapProps): JSX.Element {
+function CitiesMap({ points }: MapProps): JSX.Element {
   const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
+  const map = useMap(mapRef);
   const selectedPoint: null | { title: string } = useAppSelector(
     (state) => state.selectedPoint
   );

@@ -17,26 +17,50 @@ export enum CardType {
 export const Cities = [
   {
     name: 'Paris',
-    id: 1,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
   {
     name: 'Cologne',
-    id: 2,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
   {
     name: 'Brussels',
-    id: 3,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
   {
     name: 'Amsterdam',
-    id: 4,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
   {
     name: 'Hamburg',
-    id: 5,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
   {
     name: 'Dusseldorf',
-    id: 6,
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
   },
 ];

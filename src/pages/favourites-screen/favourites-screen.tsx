@@ -21,7 +21,7 @@ function FavoutitesScreen({ favourites }: FavoutitesScreenProps): JSX.Element {
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link to='/' className="header__logo-link" >
+              <Link to="/" className="header__logo-link">
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -42,7 +42,9 @@ function FavoutitesScreen({ favourites }: FavoutitesScreenProps): JSX.Element {
                     <span className="header__user-name user__name">
                       Oliver.conner@gmail.com
                     </span>
-                    <span className="header__favorite-count">3</span>
+                    <span className="header__favorite-count">
+                      {favourites.length}
+                    </span>
                   </a>
                 </li>
                 <li className="header__nav-item">

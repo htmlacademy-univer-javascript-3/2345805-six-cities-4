@@ -6,10 +6,10 @@ import {
   setSelectedPoint,
 } from './action';
 import { offers } from '../mocks/offers';
-import { Offer } from '../types/offer';
+import { City, Offer } from '../types/offer';
 
 type StateType = {
-  city: string;
+  city: City;
   offersList: Offer[];
   selectedSortType: string;
   selectedPoint: {
@@ -18,7 +18,14 @@ type StateType = {
 };
 
 const initialState: StateType = {
-  city: 'Paris',
+  city: {
+    name: 'Paris',
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8,
+    },
+  },
   offersList: [],
   selectedSortType: 'Popular',
   selectedPoint: null,
@@ -27,7 +34,7 @@ const initialState: StateType = {
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, { payload }) => {
-      state.city = payload;
+      state.city = { ...payload };
     })
     .addCase(setSortType, (state, { payload }) => {
       state.selectedSortType = payload;

@@ -1,4 +1,4 @@
-import CityCard from '../city-card/city-card';
+import CityCard from '../offer-card/offer-card';
 import { CityCardListProps } from '../../types/card-list';
 import { CardType } from '../../const';
 // import { useState } from 'react';
