@@ -4,7 +4,7 @@ import ReviewsList from '../../components/reviews-list/reviews-list';
 import { Review } from '../../types/review';
 import CitiesMap from '../../components/cities-map/cities-map';
 import { Offer } from '../../types/offer';
-import NearestCitiesCardList from '../../components/nearest-cities-card-list/nearest-cities-card-list';
+import NearestOffersCardList from '../../components/nearest-offers-card-list/nearest-offers-card-list';
 import { useAppSelector } from '../../hooks';
 
 type OfferScreenProps = {
@@ -202,7 +202,7 @@ function OfferScreen({ reviews }: OfferScreenProps): JSX.Element {
             <h2 className="near-places__title">
               Other places in the neighbourhood
             </h2>
-            <NearestCitiesCardList
+            <NearestOffersCardList
               offers={offers.filter((e) => e.id !== '1')}
             />
           </section>

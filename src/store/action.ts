@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { City } from '../types/offer';
+import { Offer } from '../types/offer';
 
 export const setOffersDataLoadingStatus = createAction<boolean>(
   'setOffersDataLoadingStatus'
