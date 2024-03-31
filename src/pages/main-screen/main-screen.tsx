@@ -1,24 +1,19 @@
 import { Link } from 'react-router-dom';
 import CitiesMap from '../../components/cities-map/cities-map';
-import CitiesCardList from '../../components/cities-card-list/cities-card-list';
+import OffersCardList from '../../components/offers-card-list/offers-card-list';
 import CitiesList from '../../components/cities-list/cities-list';
 import SortingBlock from '../../components/sorting-block/sorting-block';
-import { Cities } from '../../const';
-import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../hooks';
 import { Offer } from '../../types/offer';
+import { getOfferComparator } from '../../utils';
 
 function MainScreen(): JSX.Element {
-  const offers = useAppSelector((state) => state.offersList);
-  const city = useAppSelector((state) => state.city);
-
-  const [currentCityOffers, setCurrentCityOffers] = useState<Offer[]>(offers);
-
-  useEffect(() => {
-    const filteredOffers = offers.filter((offer) => offer.city.name === city);
-    setCurrentCityOffers(filteredOffers);
-  }, [city, offers]);
-
+  const [offers, city] = useAppSelector((state) => [
+    [...state.offersList]
+      .sort(getOfferComparator(state.selectedSortType))
+      .filter((offer: Offer) => offer.city.name === state.city.name),
+    state.city.name,
+  ]);
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -41,18 +36,16 @@ function MainScreen(): JSX.Element {
             <nav className="header__nav">
               <ul className="header__nav-list">
                 <li className="header__nav-item user">
-                  <a
+                  <Link
                     className="header__nav-link header__nav-link--profile"
-                    href="#"
+                    to="favourites"
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
                       Oliver.conner@gmail.com
                     </span>
-                    <Link to="/favourites">
-                      <span className="header__favorite-count">3</span>
-                    </Link>
-                  </a>
+                    <span className="header__favorite-count">3</span>
+                  </Link>
                 </li>
                 <li className="header__nav-item">
                   <a className="header__nav-link" href="#">
@@ -69,20 +62,20 @@ function MainScreen(): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <CitiesList cities={Cities} />
+            <CitiesList />
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{`${currentCityOffers.length} places to stay in ${city}`}</b>
+              <b className="places__found">{`${offers.length} places to stay in ${city}`}</b>
               <SortingBlock />
-              <CitiesCardList offers={currentCityOffers} />
+              <OffersCardList offers={offers} />
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <CitiesMap city={offers[0].city} points={currentCityOffers} />
+                <CitiesMap points={offers} />
               </section>
             </div>
           </div>
