@@ -9,12 +9,13 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>): Map | null {
   const city: City = useAppSelector((state) => state.city);
   useEffect(() => {
     if (mapRef.current !== null && !isRenderedRef.current) {
+      const { location } = city;
       const instance = new Map(mapRef.current, {
         center: {
-          lat: city.location.latitude,
-          lng: city.location.longitude,
+          lat: location.latitude,
+          lng: location.longitude,
         },
-        zoom: 10,
+        zoom: location.zoom,
       });
 
       const layer = new TileLayer(

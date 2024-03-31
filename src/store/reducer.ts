@@ -1,11 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-  setOffersList,
+  loadOffers,
   changeCity,
   setSortType,
   setSelectedPoint,
+  setError,
+  setOffersDataLoadingStatus,
 } from './action';
-import { offers } from '../mocks/offers';
 import { City, Offer } from '../types/offer';
 
 type StateType = {
@@ -15,6 +16,8 @@ type StateType = {
   selectedPoint: {
     title: string;
   } | null;
+  isOffersDataLoading: boolean;
+  error: string | null;
 };
 
 const initialState: StateType = {
@@ -29,21 +32,29 @@ const initialState: StateType = {
   offersList: [],
   selectedSortType: 'Popular',
   selectedPoint: null,
+  isOffersDataLoading: false,
+  error: null,
 };
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, { payload }) => {
-      state.city = { ...payload };
+      state.city = payload;
     })
     .addCase(setSortType, (state, { payload }) => {
       state.selectedSortType = payload;
     })
-    .addCase(setOffersList, (state) => {
-      state.offersList = offers;
+    .addCase(loadOffers, (state, { payload }) => {
+      state.offersList = payload;
     })
     .addCase(setSelectedPoint, (state, { payload }) => {
       state.selectedPoint = payload;
+    })
+    .addCase(setOffersDataLoadingStatus, (state, action) => {
+      state.isOffersDataLoading = action.payload;
+    })
+    .addCase(setError, (state, action) => {
+      state.error = action.payload;
     });
 });
 

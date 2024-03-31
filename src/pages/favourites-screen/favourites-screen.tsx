@@ -1,12 +1,10 @@
 import { Offer } from '../../types/offer';
 import FavouritesCityBlock from '../../components/favourites-city-block/favourites-city-block';
 import { Link } from 'react-router-dom';
+import { offers } from '../../mocks/offers';
 
-type FavoutitesScreenProps = {
-  favourites: Offer[];
-};
-
-function FavoutitesScreen({ favourites }: FavoutitesScreenProps): JSX.Element {
+function FavoutitesScreen(): JSX.Element {
+  const favourites = offers;
   const favouritesMap = favourites.reduce(
     (acc: Record<string, Offer[]>, place: Offer) => {
       const city = place.city.name;
