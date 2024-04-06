@@ -1,11 +1,39 @@
+import { useRef, FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
+import { loginAction } from '../../store/api-actions';
+
 function LoginScreen(): JSX.Element {
+  const loginRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+
+    if (loginRef.current !== null && passwordRef.current !== null) {
+      dispatch(
+        loginAction({
+          email: loginRef.current.value,
+          password: passwordRef.current.value,
+        })
+      );
+    }
+    navigate('/');
+  };
+
   return (
     <div className="page page--gray page--login">
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <a className="header__logo-link" href="main.html">
+              <Link
+                to="/"
+                className="header__logo-link header__logo-link--active"
+              >
                 <img
                   className="header__logo"
                   src="img/logo.svg"
@@ -13,7 +41,7 @@ function LoginScreen(): JSX.Element {
                   width="81"
                   height="41"
                 />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -23,7 +51,7 @@ function LoginScreen(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post">
+            <form className="login__form form" onSubmit={handleSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
@@ -31,6 +59,7 @@ function LoginScreen(): JSX.Element {
                   type="email"
                   name="email"
                   placeholder="Email"
+                  ref={loginRef}
                   required
                 />
               </div>
@@ -41,6 +70,7 @@ function LoginScreen(): JSX.Element {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  ref={passwordRef}
                   required
                 />
               </div>
