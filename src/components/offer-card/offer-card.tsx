@@ -4,10 +4,11 @@ import { Offer } from '../../types/offer';
 import { formatRating } from '../../utils';
 import { useAppDispatch } from '../../hooks';
 import { setSelectedPoint } from '../../store/action';
+import { CardType } from '../../const';
 
 type CityCardProps = {
   cardInfo: Offer;
-  typeClassName: string;
+  typeClassName: CardType;
 };
 
 function OfferCard({ cardInfo, typeClassName }: CityCardProps): JSX.Element {
@@ -16,8 +17,6 @@ function OfferCard({ cardInfo, typeClassName }: CityCardProps): JSX.Element {
     title,
     type,
     price,
-    // city,
-    // location,
     isFavorite,
     isPremium,
     rating,
@@ -25,11 +24,20 @@ function OfferCard({ cardInfo, typeClassName }: CityCardProps): JSX.Element {
   } = cardInfo;
   const dispatch = useAppDispatch();
   return (
-    <Link to={`/offer/${id}`} state={cardInfo}>
+    <Link to={`/offer/${id}`}>
       <article
         className={`${typeClassName} place-card`}
-        onPointerEnter={() => dispatch(setSelectedPoint({ title }))}
-        onPointerLeave={() => dispatch(setSelectedPoint(null))}
+        onPointerEnter={() => {
+          if (typeClassName === CardType.regular) {
+            dispatch(setSelectedPoint({ id }));
+          }
+        }}
+        onPointerLeave={() => {
+          if (typeClassName === CardType.regular) {
+            dispatch(setSelectedPoint(null));
+          }
+        }}
+        onClick={() => window.scrollTo(0, 0)}
       >
         {isPremium && (
           <div className="place-card__mark">
@@ -52,11 +60,13 @@ function OfferCard({ cardInfo, typeClassName }: CityCardProps): JSX.Element {
               <span className="place-card__price-text">&#47;&nbsp;night</span>
             </div>
             <button
-              className="place-card__bookmark-button place-card__bookmark-button--active button"
+              className={`place-card__bookmark-button ${
+                isFavorite ? 'place-card__bookmark-button--active' : ''
+              } button`}
               type="button"
             >
               <svg className="place-card__bookmark-icon" width="18" height="19">
-                {isFavorite && <use xlinkHref="#icon-bookmark"></use>}
+                {<use xlinkHref="#icon-bookmark"></use>}
               </svg>
               <span className="visually-hidden">In bookmarks</span>
             </button>

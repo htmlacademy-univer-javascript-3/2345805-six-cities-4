@@ -8,7 +8,7 @@ type CityProps = {
 function CityListItem({ city, changeSelectedCity }: CityProps): JSX.Element {
   return (
     <li className="locations__item" onClick={() => changeSelectedCity(city)}>
-      <a className="locations__item-link tabs__item" href="#">
+      <a className="locations__item-link tabs__item">
         <span>{city.name}</span>
       </a>
     </li>

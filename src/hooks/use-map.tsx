@@ -1,12 +1,14 @@
 import { useEffect, useState, MutableRefObject, useRef } from 'react';
 import { Map, TileLayer } from 'leaflet';
 import { City } from '../types/offer';
-import { useAppSelector } from '.';
 
-function useMap(mapRef: MutableRefObject<HTMLElement | null>): Map | null {
+function useMap(
+  mapRef: MutableRefObject<HTMLElement | null>,
+  city: City
+): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
-  const city: City = useAppSelector((state) => state.city);
+
   useEffect(() => {
     if (mapRef.current !== null && !isRenderedRef.current) {
       const { location } = city;

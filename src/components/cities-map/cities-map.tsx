@@ -3,11 +3,11 @@ import { Icon, Marker, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
 import 'leaflet/dist/leaflet.css';
-import { Offer } from '../../types/offer';
+import { ExtendedOffer, Offer } from '../../types/offer';
 import { useAppSelector } from '../../hooks';
 
 type MapProps = {
-  points: Offer[];
+  points: (Offer | ExtendedOffer)[];
 };
 
 const defaultCustomIcon = new Icon({
@@ -23,11 +23,22 @@ const currentCustomIcon = new Icon({
 });
 
 function CitiesMap({ points }: MapProps): JSX.Element {
+  const city = points[0].city;
   const mapRef = useRef(null);
-  const map = useMap(mapRef);
-  const selectedPoint: null | { title: string } = useAppSelector(
+  const map = useMap(mapRef, city);
+  const selectedPoint: null | { id: string } = useAppSelector(
     (state) => state.selectedPoint
   );
+
+  useEffect(() => {
+    if (map) {
+      map.setView(
+        [city.location.latitude, city.location.longitude],
+        city.location.zoom
+      );
+    }
+  }, [map, city]);
+
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
@@ -39,7 +50,7 @@ function CitiesMap({ points }: MapProps): JSX.Element {
         });
         marker
           .setIcon(
-            selectedPoint !== null && point.title === selectedPoint.title
+            selectedPoint !== null && point.id === selectedPoint.id
               ? currentCustomIcon
               : defaultCustomIcon
           )
