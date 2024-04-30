@@ -1,56 +1,64 @@
-import { useRef, useEffect } from 'react';
-import { Icon, Marker, layerGroup } from 'leaflet';
-import useMap from '../../hooks/use-map';
-import { URL_MARKER_DEFAULT, URL_MARKER_CURRENT } from '../../const';
+import { useEffect, useRef } from 'react';
+import useMap from './use-map';
 import 'leaflet/dist/leaflet.css';
-import { ExtendedOffer, Offer } from '../../types/offer';
-import { useAppSelector } from '../../hooks';
-
-type MapProps = {
-  points: (Offer | ExtendedOffer)[];
-};
+import { Icon, layerGroup, Marker } from 'leaflet';
+import { Location, ExtendedOffer, Offer } from '../../types/offer';
+import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../../const';
 
 const defaultCustomIcon = new Icon({
   iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
 });
 
 const currentCustomIcon = new Icon({
   iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39],
 });
 
-function CitiesMap({ points }: MapProps): JSX.Element {
-  const city = points[0].city;
-  const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
-  const selectedPoint: null | { id: string } = useAppSelector(
-    (state) => state.selectedPoint
-  );
+type CitiesMapProps = {
+  centerCoordinates: Location;
+  offers: Offer[];
+  selectedOfferId?: Offer['id'];
+  scrollWheelZoom?: boolean;
+  currentOffer?: ExtendedOffer;
+};
 
-  useEffect(() => {
-    if (map) {
-      map.setView(
-        [city.location.latitude, city.location.longitude],
-        city.location.zoom
-      );
-    }
-  }, [map, city]);
+function CitiesMap(props: CitiesMapProps): JSX.Element {
+  const {
+    centerCoordinates,
+    offers,
+    selectedOfferId,
+    scrollWheelZoom,
+    currentOffer,
+  } = props;
+
+  const mapRef = useRef(null);
+  const map = useMap(mapRef, centerCoordinates, scrollWheelZoom);
 
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
-      points.forEach((point) => {
-        const { location } = point;
+
+      if (currentOffer) {
         const marker = new Marker({
-          lat: location.latitude,
-          lng: location.longitude,
+          lat: currentOffer.location.latitude,
+          lng: currentOffer.location.longitude,
         });
+
+        marker.setIcon(currentCustomIcon).addTo(markerLayer);
+      }
+
+      offers.forEach((offer) => {
+        const marker = new Marker({
+          lat: offer.location.latitude,
+          lng: offer.location.longitude,
+        });
+
         marker
           .setIcon(
-            selectedPoint !== null && point.id === selectedPoint.id
+            selectedOfferId !== undefined && offer.id === selectedOfferId
               ? currentCustomIcon
               : defaultCustomIcon
           )
@@ -61,7 +69,13 @@ function CitiesMap({ points }: MapProps): JSX.Element {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, points, selectedPoint]);
+  }, [currentOffer, map, offers, selectedOfferId]);
+
+  useEffect(() => {
+    if (map) {
+      map.flyTo([centerCoordinates.latitude, centerCoordinates.longitude]);
+    }
+  }, [centerCoordinates, map]);
 
   return <div style={{ height: '100%' }} ref={mapRef}></div>;
 }
