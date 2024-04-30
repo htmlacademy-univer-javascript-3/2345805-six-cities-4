@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import cn from 'classnames';
 import { SortingType } from '../../const';
 import { changeSortingType, getSelectedSortType } from '../../store';
@@ -52,4 +52,6 @@ function SortingBlock() {
   );
 }
 
-export default SortingBlock;
+const SortingBlockMemo = memo(SortingBlock);
+
+export default SortingBlockMemo;
