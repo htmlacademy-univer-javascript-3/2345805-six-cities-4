@@ -10,6 +10,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../hooks';
 
 import { Status } from '../../const';
+import { toast } from 'react-toastify';
 
 const ratingTypes: Record<string, number> = {
   terribly: 1,
@@ -22,6 +23,8 @@ const ratingTypes: Record<string, number> = {
 const MIN_LENGTH_COMMENT = 50;
 const MAX_LENGTH_COMMENT = 300;
 const DEFAULT_RATING = -1;
+const COMMENT_ERROR_MESSAGE =
+  'Comment length must be >= 50 and <= 300 symbols. Rating must be set';
 
 type CommentFormProps = {
   offerId: string;
@@ -63,6 +66,11 @@ function CommentForm({ offerId }: CommentFormProps): JSX.Element {
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    validateForm(comment.length, rating);
+    if (invalid) {
+      toast.error(COMMENT_ERROR_MESSAGE);
+      return;
+    }
     dispatch(postReviewAction({ comment, rating, offerId }));
   };
 
@@ -89,6 +97,7 @@ function CommentForm({ offerId }: CommentFormProps): JSX.Element {
           checked={ratingStar === rating}
           disabled={isLoading}
           onChange={() => handleClickStar(ratingStar)}
+          data-testid={`${ratingStar}-stars`}
         />
         <label
           htmlFor={`${ratingStar}-stars`}
