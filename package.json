@@ -7,6 +7,9 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx",
     "preview": "vite preview",
+    "pretest": "wait-on http://localhost:5173 && npm run pwt-test",
+    "pwt-test": "cd pwt-tests && npx playwright test --ui",
+    "test:e2e": "concurrently \"npm run start\" \"npm run pretest\"",
     "test": "vitest --passWithNoTests"
   },
   "dependencies": {
@@ -38,6 +41,7 @@
     "@typescript-eslint/parser": "6.7.4",
     "@vitejs/plugin-react": "4.1.0",
     "axios-mock-adapter": "1.22.0",
+    "concurrently": "^8.2.2",
     "eslint": "8.51.0",
     "eslint-config-htmlacademy": "9.1.1",
     "eslint-plugin-react-hooks": "4.6.0",
@@ -46,7 +50,8 @@
     "jsdom": "22.1.0",
     "typescript": "5.2.2",
     "vite": "4.4.11",
-    "vitest": "0.34.6"
+    "vitest": "0.34.6",
+    "wait-on": "^7.2.0"
   },
   "browserslist": {
     "production": [
