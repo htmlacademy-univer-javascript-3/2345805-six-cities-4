@@ -1,13 +1,17 @@
 import { test, expect } from '@playwright/test';
 
-test('check loading and displaying cards from server', async ({ page }) => {
+test('Проверка загрузки карточек на главной странице', async ({ page }) => {
   // Открываем страницу с карточками
+  page.waitForResponse(
+    (resp) => resp.url().includes('/offers') && resp.status() === 200
+  );
+
   await page.goto('http://localhost:5173');
 
-  // Ожидаем загрузки карточек
-  await page.waitForSelector('.cities__card');
+  await page.waitForSelector('.header__nav-link');
 
-  // Проверяем, что карточки загрузились и отобразились
-  const cardElements = await page.$$('.cities__card');
-  expect(cardElements.length).toBeGreaterThan(0); // Убедимся, что на странице есть хотя бы одна карточка
+  const cardTitles = await page.getByTestId('cardTitle').allInnerTexts();
+
+  expect(cardTitles.length).toBeGreaterThan(0);
+  cardTitles.forEach((title) => title.length > 5);
 });

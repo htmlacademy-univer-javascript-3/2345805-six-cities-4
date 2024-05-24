@@ -69,7 +69,9 @@ function CommonPlaceCard(props: PlaceCardProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={pathCard}>{rest.title}</Link>
+          <Link to={pathCard} data-testid="cardTitle">
+            {rest.title}
+          </Link>
         </h2>
         <p className="place-card__type">{capitalizedType}</p>
       </div>
