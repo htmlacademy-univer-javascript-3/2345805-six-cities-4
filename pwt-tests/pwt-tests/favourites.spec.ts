@@ -23,51 +23,58 @@ test.describe('Favourites', () => {
     await page.waitForURL('http://localhost:5173/login');
   });
 
-  // test('Проверка работы Избранного (авторизованный пользователь)', async ({
-  //   page,
-  // }) => {
-  //   await page.goto('http://localhost:5173/login');
+  test('Проверка работы Избранного (авторизованный пользователь)', async ({
+    page,
+  }) => {
+    const isFavSelected = async () => {
+      const favBtnClassList = await page
+        .locator('.bookmark-button')
+        .first()
+        .evaluate((el) => [...el.classList]);
+      return favBtnClassList.includes('place-card__bookmark-button--active');
+    };
 
-  //   // Fill in the login form
-  //   await page.fill('input[name="email"]', 'email@example.com');
-  //   await page.fill('input[name="password"]', 'password123');
+    const getFavCount = async () =>
+      parseInt(
+        (await page.locator('.header__favorite-count').textContent()) || '0'
+      );
 
-  //   // Submit the form
-  //   await Promise.all([
-  //     page.waitForURL('http://localhost:5173'), // Ожидание перехода после отправки формы
-  //     page.click('button[type="submit"]'), // Клик по кнопке "Sign in"
-  //   ]);
+    await page.goto('http://localhost:5173/login');
 
-  //   await page.waitForSelector('.cities__card');
+    // Fill in the login form
+    await page.fill('input[name="email"]', 'email@example.com');
+    await page.fill('input[name="password"]', 'password123');
 
-  //   const initialFavCounter = parseInt(
-  //     (await page.locator('.header__favorite-count').textContent()) || '0'
-  //   );
+    // Submit the form
+    await Promise.all([
+      page.waitForURL('http://localhost:5173'), // Ожидание перехода после отправки формы
+      page.click('button[type="submit"]'), // Клик по кнопке "Sign in"
+    ]);
 
-  //   const initialFavBtnClassList = await page
-  //     .locator('.bookmark-button')
-  //     .first()
-  //     .evaluate((el) => [...el.classList]);
-  //   const wasActive = initialFavBtnClassList.includes(
-  //     'place-card__bookmark-button--active'
-  //   );
-  //   console.log(initialFavBtnClassList, wasActive);
-  //   page.locator('.bookmark-button').first().click();
+    await page.waitForSelector('.cities__card');
 
-  //   const favBtnClassList = await page
-  //     .locator('.bookmark-button')
-  //     .first()
-  //     .evaluate((el) => [...el.classList]);
-  //   const isSelected = favBtnClassList.includes(
-  //     'place-card__bookmark-button--active'
-  //   );
+    const initialFavCounter = await getFavCount();
 
-  //   if (wasActive) {
-  //     expect(isSelected).toBeFalsy();
-  //     expect(initialFavCounter).toEqual(initialFavCounter - 1);
-  //   } else {
-  //     expect(isSelected).toBeTruthy();
-  //     expect(initialFavCounter).toEqual(initialFavCounter + 1);
-  //   }
-  // });
+    const wasActive = await isFavSelected();
+
+    await Promise.all([
+      page.waitForResponse(
+        (resp) =>
+          resp.url().includes('/favorite') &&
+          resp.status() === (wasActive ? 200 : 201)
+      ),
+      page.locator('.bookmark-button').first().click(),
+    ]);
+
+    const isActive = await isFavSelected();
+    const changedFavCounter = await getFavCount();
+
+    if (wasActive) {
+      expect(isActive).toBeFalsy();
+      expect(changedFavCounter).toEqual(initialFavCounter - 1);
+    } else {
+      expect(isActive).toBeTruthy();
+      expect(changedFavCounter).toEqual(initialFavCounter + 1);
+    }
+  });
 });
