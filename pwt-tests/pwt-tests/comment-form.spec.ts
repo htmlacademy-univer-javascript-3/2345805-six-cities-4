@@ -28,7 +28,12 @@ test.describe('Comment Form', () => {
     await page.fill('[name="review"]', REVIEW_TEXT);
     await page.getByTitle(RATING).click();
 
-    await page.click('button[type="submit"]');
+    await Promise.all([
+      page.waitForResponse(
+        (resp) => resp.url().includes('/comments') && resp.status() === 201
+      ),
+      page.click('button[type="submit"]'),
+    ]);
 
     const newReviewText = await page
       .locator('.reviews__text')
