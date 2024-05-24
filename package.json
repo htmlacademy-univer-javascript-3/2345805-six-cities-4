@@ -7,10 +7,8 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx",
     "preview": "vite preview",
-    "pretest": "wait-on http://localhost:5173 && npm run pwt-test",
-    "pwt-test": "cd pwt-tests && npx playwright test --ui",
-    "test:e2e": "concurrently \"npm run start\" \"npm run pretest\"",
-    "test": "vitest --passWithNoTests"
+    "pwt-test": "cd pwt-tests && npm install && npx playwright test",
+    "test": "cd pwt-tests && npx playwright test"
   },
   "dependencies": {
     "@reduxjs/toolkit": "1.9.7",

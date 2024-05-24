@@ -1,82 +1,64 @@
 import { test, expect } from '@playwright/test';
 
-test('comment submission form functionality (signed in)', async ({ page }) => {
-  await page.goto('http://localhost:5173');
-
-  await page.waitForSelector('.header__nav-link');
-  const navigationLinkBtn = await page.$('.header__nav-link');
-  const loginButton = await page.$('.header__login');
-
-  if (loginButton) {
-    // Если есть элемент для входа, кликаем на него
-    await navigationLinkBtn?.click();
-  } else {
-    // Если нет элемента для входа, ищем элемент для выхода и кликаем на него
-    await navigationLinkBtn?.click();
-
-    // Ждем некоторое время, чтобы страница обновилась после выхода
-    await page.waitForTimeout(2000);
+test.describe('Comment Form', () => {
+  test('Проверка работы формы комментария (авторизованный пользователь)', async ({
+    page,
+  }) => {
+    const REVIEW_TEXT =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+    const RATING = 'good';
 
     await page.goto('http://localhost:5173/login');
-  }
 
-  await page.waitForTimeout(2000);
+    await page.fill('input[name="email"]', 'newUser@example.com');
+    await page.fill('input[name="password"]', 'password123');
 
-  await page.fill('input[name="email"]', 'email@example.com');
-  await page.fill('input[name="password"]', 'password123');
+    await page.click('button[type="submit"]');
 
-  await Promise.all([
-    page.waitForURL('http://localhost:5173'),
-    page.click('button[type="submit"]'),
-  ]);
+    await page.waitForSelector('.cities__card');
 
-  await page.waitForSelector('.cities__card');
-  const firstCard = await page.$('.cities__card');
-  await firstCard?.click();
-  await page.waitForSelector('.offer__gallery');
+    await page.locator('.cities__card').first().click();
 
-  const commentForm = await page.$('.reviews__form');
-  expect(commentForm).toBeTruthy();
+    await page.waitForSelector('.offer__gallery');
+    const isFormExist = await page.isVisible('.reviews__form');
+    expect(isFormExist).toBeTruthy();
 
-  const reviewText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-  await page.fill('[name="review"]', reviewText);
+    const commentForm = await page.locator('.reviews__form');
+    expect(commentForm).toBeTruthy();
+    await page.fill('[name="review"]', REVIEW_TEXT);
+    await page.getByTitle(RATING).click();
 
-  const ratingInputs = await page.$$('.form__rating-label');
-  const selectedRating = ratingInputs[0];
-  await selectedRating.click();
+    await page.click('button[type="submit"]');
 
-  await page.click('button[type="submit"]');
+    const newReviewText = await page
+      .locator('.reviews__text')
+      .first()
+      .textContent();
+    const newReviewAuthor = await page
+      .locator('.reviews__user-name')
+      .first()
+      .textContent();
+    const newReviewRating = await page
+      .locator('.reviews__stars>span')
+      .first()
+      .getAttribute('style');
 
-  await page.waitForTimeout(3000);
+    expect(newReviewText).toBe(REVIEW_TEXT);
+    expect(newReviewAuthor).toBe('newUser');
+    expect(newReviewRating).toBe('width: 80%;');
+  });
 
-  const newReview = await page.$('.reviews__item');
+  test('Проверка работы формы комментария (неавторизованный пользователь)', async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:5173');
 
-  const newReviewText = await newReview?.$eval('.reviews__text', (el) =>
-    el.textContent?.trim()
-  );
+    await page.waitForSelector('.cities__card');
 
-  expect(newReviewText).toBe(reviewText);
-});
+    await page.locator('.cities__card').first().click();
+    await page.waitForSelector('.offer__gallery');
 
-test('comment submission form functionality (signed up)', async ({ page }) => {
-  await page.goto('http://localhost:5173');
-
-  await page.waitForSelector('.header__nav-link');
-  const navigationLinkBtn = await page.$('.header__nav-link');
-  const loginButton = await page.$('.header__login');
-
-  if (!loginButton) {
-    await Promise.all([
-      page.waitForURL('http://localhost:5173'),
-      navigationLinkBtn?.click(),
-    ]);
-  }
-
-  await page.waitForSelector('.cities__card');
-  const firstCard = await page.$('.cities__card');
-  await firstCard?.click();
-  await page.waitForSelector('.offer__gallery');
-
-  const commentForm = await page.$('.reviews__form');
-  expect(commentForm).not.toBeTruthy();
+    const isCommentFormExist = await page.locator('.reviews__form').isVisible();
+    expect(isCommentFormExist).toBeFalsy();
+  });
 });

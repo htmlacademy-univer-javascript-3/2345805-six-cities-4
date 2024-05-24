@@ -39,7 +39,7 @@ function CitiesList({ selectedCity }: CitiesListProps): JSX.Element {
                   'tabs__item--active': selectedCity === city,
                 })}
                 href="#"
-                data-test={city}
+                data-testid={city}
                 onClick={(evt) => handleCityChange(evt, city)}
               >
                 <span>{city}</span>

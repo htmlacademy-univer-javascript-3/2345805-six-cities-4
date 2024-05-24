@@ -1,36 +1,35 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Locator } from '@playwright/test';
 
-test('check filtering of cards', async ({ page }) => {
+test('Проверка работы фильтрации по городам', async ({ page }) => {
   // Открываем страницу с карточками
   await page.goto('http://localhost:5173');
 
-  // Ожидаем загрузки карточек
-  await page.waitForSelector('.cities__card');
+  const isActive = async (locator: Locator) => {
+    const classList = await locator.evaluate((el) => [...el.classList]);
+    return classList.includes('tabs__item--active');
+  };
 
-  const locations = await page.$$('.locations__item-link');
-  for (const location of locations) {
-    // Получаем значение атрибута data-test
-    const dataTestValue = await location.getAttribute('data-test');
+  await page.waitForSelector('.locations__item-link');
 
-    // Кликаем на элемент
-    await location.click();
+  for (const li of await page.locator('.locations__item-link').all()) {
+    await li.click();
+    const currentCity = await li.textContent();
 
-    // Ждем, чтобы страница обновилась
-    await page.waitForSelector('.places__found', { state: 'attached' });
     // Ожидаем перерисовки карточек после фильтрации
     await page.waitForSelector('.cities__card', {
       state: 'attached',
       timeout: 5000,
     });
 
-    const placesFoundText = await page.$eval('.places__found', (el) =>
-      el.textContent?.trim()
-    );
+    // Кликаем на элемент
+    const hasActiveClass = await isActive(li);
+    expect(hasActiveClass).toBeTruthy();
+
+    const placesFoundText = await page.locator('.places__found').textContent();
 
     // Получаем последнее слово из текста
     const lastWord = placesFoundText?.split(' ').pop();
-
     // Проверяем, что значение атрибута data-test равно последнему слову из places__found
-    expect(dataTestValue).toBe(lastWord);
+    expect(currentCity).toBe(lastWord);
   }
 });
