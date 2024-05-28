@@ -7,8 +7,7 @@
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx",
     "preview": "vite preview",
-    "pwt-test": "cd pwt-tests && npm install && npx playwright test",
-    "test": "cd pwt-tests && npm install && npx playwright test"
+    "test": "cd pwt-tests && npm install && npx playwright test && npx playwright show-report"
   },
   "dependencies": {
     "@reduxjs/toolkit": "1.9.7",
